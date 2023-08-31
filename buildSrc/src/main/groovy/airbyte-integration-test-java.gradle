@@ -22,6 +22,7 @@ class AirbyteIntegrationTestJavaPlugin implements Plugin<Project> {
         }
 
         project.task('integrationTestJava', type: Test) {
+            failFast = true
             mustRunAfter project.test
 
             testClassesDirs = project.sourceSets.integrationTestJava.output.classesDirs
