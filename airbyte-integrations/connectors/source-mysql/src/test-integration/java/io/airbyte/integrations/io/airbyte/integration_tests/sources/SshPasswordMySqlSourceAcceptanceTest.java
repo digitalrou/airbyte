@@ -19,6 +19,7 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.testcontainers.containers.MySQLContainer;
+import org.testcontainers.utility.DockerImageName;
 import org.testcontainers.containers.Network;
 import uk.org.webcompere.systemstubs.environment.EnvironmentVariables;
 import uk.org.webcompere.systemstubs.jupiter.SystemStub;
@@ -64,7 +65,7 @@ public class SshPasswordMySqlSourceAcceptanceTest extends AbstractSshMySqlSource
   }
 
   private MySQLContainer initAndStartJdbcContainer(final Network network) {
-    final MySQLContainer<?> db = new MySQLContainer<>("mysql:8.0").withNetwork(network);
+    final MySQLContainer<?> db = new MySQLContainer<>(DockerImageName.parse("mysql:8.0")).withNetwork(network);
     db.start();
     return db;
   }

@@ -38,6 +38,8 @@ import org.jooq.DSLContext;
 import org.jooq.SQLDialect;
 import org.junit.jupiter.api.Test;
 import org.testcontainers.containers.MySQLContainer;
+import org.testcontainers.utility.DockerImageName;
+import io.airbyte.integrations.util.HostPortResolver;
 
 public class CdcMySqlSslRequiredSourceAcceptanceTest extends SourceAcceptanceTest {
 
@@ -97,7 +99,7 @@ public class CdcMySqlSslRequiredSourceAcceptanceTest extends SourceAcceptanceTes
 
   @Override
   protected void setupEnvironment(final TestDestinationEnv environment) throws Exception {
-    container = new MySQLContainer<>("mysql:8.0");
+    container = new MySQLContainer<>(DockerImageName.parse("mysql:8.0"));
     container.start();
 
     final var sslMode = ImmutableMap.builder()
@@ -109,8 +111,8 @@ public class CdcMySqlSslRequiredSourceAcceptanceTest extends SourceAcceptanceTes
         .build());
 
     config = Jsons.jsonNode(ImmutableMap.builder()
-        .put(JdbcUtils.HOST_KEY, container.getHost())
-        .put(JdbcUtils.PORT_KEY, container.getFirstMappedPort())
+        .put(JdbcUtils.HOST_KEY, HostPortResolver.resolveHost(container))
+        .put(JdbcUtils.PORT_KEY, HostPortResolver.resolvePort(container))
         .put(JdbcUtils.DATABASE_KEY, container.getDatabaseName())
         .put(JdbcUtils.USERNAME_KEY, container.getUsername())
         .put(JdbcUtils.PASSWORD_KEY, container.getPassword())
@@ -155,8 +157,8 @@ public class CdcMySqlSslRequiredSourceAcceptanceTest extends SourceAcceptanceTes
         "test",
         DatabaseDriver.MYSQL.getDriverClassName(),
         String.format(DatabaseDriver.MYSQL.getUrlFormatString(),
-            container.getHost(),
-            container.getFirstMappedPort(),
+            HostPortResolver.resolveHost(container),
+            HostPortResolver.resolvePort(container),
             container.getDatabaseName()),
         SQLDialect.MYSQL)) {
       final Database database = new Database(dslContext);
