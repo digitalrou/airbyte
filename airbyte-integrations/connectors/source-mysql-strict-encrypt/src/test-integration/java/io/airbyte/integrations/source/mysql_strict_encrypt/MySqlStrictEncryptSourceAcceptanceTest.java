@@ -30,6 +30,7 @@ import java.util.HashMap;
 import org.jooq.DSLContext;
 import org.jooq.SQLDialect;
 import org.testcontainers.containers.MySQLContainer;
+import org.testcontainers.utility.DockerImageName;
 
 public class MySqlStrictEncryptSourceAcceptanceTest extends SourceAcceptanceTest {
 
@@ -41,7 +42,7 @@ public class MySqlStrictEncryptSourceAcceptanceTest extends SourceAcceptanceTest
 
   @Override
   protected void setupEnvironment(final TestDestinationEnv environment) throws Exception {
-    container = new MySQLContainer<>("mysql:8.0");
+    container = new MySQLContainer<>(DockerImageName.parse("mysql:8.0"));
     container.start();
 
     var sslMode = ImmutableMap.builder()

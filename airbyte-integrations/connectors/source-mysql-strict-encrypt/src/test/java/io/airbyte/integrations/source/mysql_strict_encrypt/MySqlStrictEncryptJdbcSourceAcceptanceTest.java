@@ -51,6 +51,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.testcontainers.containers.MySQLContainer;
+import org.testcontainers.utility.DockerImageName;
 import org.testcontainers.containers.Network;
 import uk.org.webcompere.systemstubs.environment.EnvironmentVariables;
 import uk.org.webcompere.systemstubs.jupiter.SystemStub;
@@ -73,7 +74,7 @@ class MySqlStrictEncryptJdbcSourceAcceptanceTest extends JdbcSourceAcceptanceTes
 
   @BeforeAll
   static void init() throws SQLException {
-    container = new MySQLContainer<>("mysql:8.0")
+    container = new MySQLContainer<>(DockerImageName.parse("mysql:8.0"))
         .withUsername(TEST_USER)
         .withPassword(TEST_PASSWORD)
         .withEnv("MYSQL_ROOT_HOST", "%")
@@ -342,7 +343,7 @@ class MySqlStrictEncryptJdbcSourceAcceptanceTest extends JdbcSourceAcceptanceTes
 
   @Test
   void testCheckWithSSlModeDisabled() throws Exception {
-    try (final MySQLContainer<?> db = new MySQLContainer<>("mysql:8.0").withNetwork(network)) {
+    try (final MySQLContainer<?> db = new MySQLContainer<>(DockerImageName.parse("mysql:8.0")).withNetwork(network)) {
       bastion.initAndStartBastion(network);
       db.start();
       final JsonNode configWithSSLModeDisabled = bastion.getTunnelConfig(SshTunnel.TunnelMethod.SSH_PASSWORD_AUTH, ImmutableMap.builder()
