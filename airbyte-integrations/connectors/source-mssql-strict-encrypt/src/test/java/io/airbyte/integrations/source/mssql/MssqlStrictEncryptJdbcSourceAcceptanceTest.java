@@ -20,7 +20,6 @@ import io.airbyte.integrations.base.Source;
 import io.airbyte.integrations.base.ssh.SshHelpers;
 import io.airbyte.integrations.source.jdbc.AbstractJdbcSource;
 import io.airbyte.integrations.source.jdbc.test.JdbcSourceAcceptanceTest;
-import io.airbyte.integrations.util.HostPortResolver;
 import io.airbyte.protocol.models.v0.ConnectorSpecification;
 import java.sql.JDBCType;
 import java.util.function.Function;
@@ -50,8 +49,8 @@ public class MssqlStrictEncryptJdbcSourceAcceptanceTest extends JdbcSourceAccept
   @BeforeEach
   public void setup() throws Exception {
     final JsonNode configWithoutDbName = Jsons.jsonNode(ImmutableMap.builder()
-        .put(JdbcUtils.HOST_KEY, HostPortResolver.resolveHost(dbContainer))
-        .put(JdbcUtils.PORT_KEY, HostPortResolver.resolvePort(dbContainer))
+        .put(JdbcUtils.HOST_KEY, dbContainer.getHost())
+        .put(JdbcUtils.PORT_KEY, dbContainer.getFirstMappedPort())
         .put(JdbcUtils.USERNAME_KEY, dbContainer.getUsername())
         .put(JdbcUtils.PASSWORD_KEY, dbContainer.getPassword())
         .build());
@@ -61,8 +60,8 @@ public class MssqlStrictEncryptJdbcSourceAcceptanceTest extends JdbcSourceAccept
         configWithoutDbName.get(JdbcUtils.PASSWORD_KEY).asText(),
         DatabaseDriver.MSSQLSERVER.getDriverClassName(),
         String.format("jdbc:sqlserver://%s:%d",
-            configWithoutDbName.get(dbContainer.getHost()).asText(),
-            configWithoutDbName.get(dbContainer.getFirstMappedPort()).asInt()));
+            configWithoutDbName.get(JdbcUtils.HOST_KEY).asText(),
+            configWithoutDbName.get(JdbcUtils.PORT_KEY).asInt()));
 
     try {
       database = new DefaultJdbcDatabase(dataSource);
