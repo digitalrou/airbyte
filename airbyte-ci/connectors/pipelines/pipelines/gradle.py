@@ -9,7 +9,7 @@ from typing import ClassVar, List, Tuple
 
 from dagger import CacheVolume, Directory
 from pipelines.actions import environments
-from pipelines.bases import Step, StepResult
+from pipelines.bases import Step, StepResult, StepStatus
 from pipelines.contexts import PipelineContext
 
 
@@ -66,7 +66,7 @@ class GradleTask(Step, ABC):
         return build_src_dir.with_new_file("src/main/groovy/airbyte-connector-acceptance-test.gradle", contents=cat_gradle_plugin_content)
 
     def _get_gradle_command(
-        self, extra_options: Tuple[str, ...] = ("--scan", "--build-cache", "--no-daemon", "--parallel", "--no-watch-fs", "--info")
+        self, extra_options: Tuple[str, ...] = ("--scan", "--build-cache", "--no-daemon", "--parallel", "--no-watch-fs", "--debug")
     ) -> List:
         command = (
             ["./gradlew"]
@@ -93,7 +93,11 @@ class GradleTask(Step, ABC):
         )
         if self.with_java_cdk_snapshot:
             connector_under_test = connector_under_test.with_exec(["./gradlew", ":airbyte-cdk:java:airbyte-cdk:publishSnapshotIfNeeded"])
-        connector_under_test = connector_under_test.with_exec(self._get_gradle_command()).with_exec(
-            ["rsync", "-az", "/root/.gradle/", "/root/gradle-cache"]
-        )
-        return await self.get_step_result(connector_under_test)
+        connector_under_test = connector_under_test.with_exec(self._get_gradle_command())
+        result = await self.get_step_result(connector_under_test)
+        if result.status is StepStatus.SUCCESS:
+            await self.export_cache_to_volume(result.output_artifact)
+        return result
+
+    async def export_cache_to_volume(self, container):
+        await container.with_exec(["rsync", "-az", "/root/.gradle/", "/root/gradle-cache"])

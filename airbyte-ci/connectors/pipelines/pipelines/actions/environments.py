@@ -562,6 +562,7 @@ def with_gradle(
         .with_env_variable("GRADLE_HOME", "/root/.gradle")
         .with_env_variable("GRADLE_USER_HOME", "/root/.gradle")
         .with_workdir("/airbyte")
+        .with_env_variable("AIRBYTE_CI", "True")
         .with_mounted_cache("/root/gradle-cache", gradle_cache, sharing=CacheSharingMode.LOCKED)
         .with_exec(["rsync", "-az", "/root/gradle-cache/", "/root/.gradle"])
         .with_mounted_directory("/airbyte", context.get_repo_dir(".", include=include))
