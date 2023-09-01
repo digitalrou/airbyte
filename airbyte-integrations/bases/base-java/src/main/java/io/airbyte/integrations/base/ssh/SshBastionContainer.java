@@ -67,7 +67,7 @@ public class SshBastionContainer {
         .put("host", HostPortResolver.resolveHost(db))
         .put("username", db.getUsername())
         .put("password", db.getPassword())
-        .put("port", HostPortResolver.resolvePort(db)))
+        .put("port", HostPortResolver.resolvePort(db))
         .put("database", schemaName)
         .put("ssl", false);
   }
