@@ -67,8 +67,8 @@ public class MySqlStrictEncryptSourceAcceptanceTest extends SourceAcceptanceTest
         config.get(JdbcUtils.PASSWORD_KEY).asText(),
         DatabaseDriver.MYSQL.getDriverClassName(),
         String.format("jdbc:mysql://%s:%s/%s?%s",
-            config.get(JdbcUtils.HOST_KEY).asText(),
-            config.get(JdbcUtils.PORT_KEY).asText(),
+            container.getHost(),
+            container.getFirstMappedPort(),
             config.get(JdbcUtils.DATABASE_KEY).asText(),
             String.join("&", SSL_PARAMETERS)),
         SQLDialect.MYSQL)) {

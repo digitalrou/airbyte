@@ -49,7 +49,7 @@ public class MySqlSslSourceAcceptanceTest extends MySqlSourceAcceptanceTest {
         DatabaseDriver.MYSQL.getDriverClassName(),
         String.format("jdbc:mysql://%s:%s/%s",
             container.getHost(),
-            container.getFirstMappedPort().toString(),
+            container.getFirstMappedPort(),
             config.get(JdbcUtils.DATABASE_KEY).asText()),
         SQLDialect.MYSQL)) {
       final Database database = new Database(dslContext);
