@@ -66,7 +66,17 @@ class GradleTask(Step, ABC):
         return build_src_dir.with_new_file("src/main/groovy/airbyte-connector-acceptance-test.gradle", contents=cat_gradle_plugin_content)
 
     def _get_gradle_command(
-        self, extra_options: Tuple[str, ...] = ("--scan", "--build-cache", "--no-daemon", "--parallel", "--no-watch-fs")
+        self,
+        extra_options: Tuple[str, ...] = (
+            "--scan",
+            "--build-cache",
+            "--no-daemon",
+            "--no-parallel",
+            "--no-watch-fs",
+            "--configuration-cache",
+            "--foreground",
+            "--max-workers=8",
+        ),
     ) -> List:
         command = (
             ["./gradlew"]
