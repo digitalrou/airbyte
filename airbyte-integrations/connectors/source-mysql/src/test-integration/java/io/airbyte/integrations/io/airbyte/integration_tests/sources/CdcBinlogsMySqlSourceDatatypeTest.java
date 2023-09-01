@@ -104,8 +104,8 @@ public class CdcBinlogsMySqlSourceDatatypeTest extends AbstractMySqlSourceDataty
         config.get(JdbcUtils.PASSWORD_KEY).asText(),
         DatabaseDriver.MYSQL.getDriverClassName(),
         String.format(DatabaseDriver.MYSQL.getUrlFormatString(),
-            config.get(JdbcUtils.HOST_KEY).asText(),
-            config.get(JdbcUtils.PORT_KEY).asInt(),
+            container.getHost(),
+            container.getFirstMappedPort(),
             config.get(JdbcUtils.DATABASE_KEY).asText()),
         SQLDialect.MYSQL);
     final Database database = new Database(dslContext);

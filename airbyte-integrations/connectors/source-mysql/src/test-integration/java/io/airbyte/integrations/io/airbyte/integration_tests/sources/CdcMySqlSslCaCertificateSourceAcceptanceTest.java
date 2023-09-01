@@ -159,8 +159,8 @@ public class CdcMySqlSslCaCertificateSourceAcceptanceTest extends SourceAcceptan
         "test",
         DatabaseDriver.MYSQL.getDriverClassName(),
         String.format(DatabaseDriver.MYSQL.getUrlFormatString(),
-            HostPortResolver.resolveHost(container),
-            HostPortResolver.resolvePort(container),
+            container.getHost(),
+            container.getFirstMappedPort(),
             container.getDatabaseName()),
         SQLDialect.MYSQL)) {
       final Database database = new Database(dslContext);

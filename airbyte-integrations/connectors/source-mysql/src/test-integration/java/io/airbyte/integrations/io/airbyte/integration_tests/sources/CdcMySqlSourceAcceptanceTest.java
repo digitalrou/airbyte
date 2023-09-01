@@ -184,8 +184,8 @@ public class CdcMySqlSourceAcceptanceTest extends SourceAcceptanceTest {
         "test",
         DatabaseDriver.MYSQL.getDriverClassName(),
         String.format(DatabaseDriver.MYSQL.getUrlFormatString(),
-            HostPortResolver.resolveHost(container),
-            HostPortResolver.resolvePort(container),
+            container.getHost(),
+            container.getFirstMappedPort(),
             container.getDatabaseName()),
         SQLDialect.MYSQL)) {
       final Database database = new Database(dslContext);
