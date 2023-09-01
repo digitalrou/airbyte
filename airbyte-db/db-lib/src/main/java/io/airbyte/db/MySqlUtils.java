@@ -7,6 +7,7 @@ package io.airbyte.db;
 import com.google.common.annotations.VisibleForTesting;
 import java.io.IOException;
 import org.testcontainers.containers.MySQLContainer;
+import org.testcontainers.utility.DockerImageName;
 
 public class MySqlUtils {
 
