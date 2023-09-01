@@ -74,8 +74,7 @@ class GradleTask(Step, ABC):
             "--no-parallel",
             "--no-watch-fs",
             "--configuration-cache",
-            "--foreground",
-            "--max-workers=8",
+            "--max-workers=1",
         ),
     ) -> List:
         command = (
