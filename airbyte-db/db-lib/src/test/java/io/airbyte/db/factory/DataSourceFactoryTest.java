@@ -20,7 +20,6 @@ import org.junit.jupiter.api.Test;
 import org.testcontainers.containers.MySQLContainer;
 import org.testcontainers.utility.DockerImageName;
 
-
 /**
  * Test suite for the {@link DataSourceFactory} class.
  */
