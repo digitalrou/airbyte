@@ -70,7 +70,6 @@ class GradleTask(Step, ABC):
         extra_options: Tuple[str, ...] = (
             "--scan",
             "--build-cache",
-            "--configuration-cache",
             "--no-daemon",
             "--no-watch-fs",
         ),
