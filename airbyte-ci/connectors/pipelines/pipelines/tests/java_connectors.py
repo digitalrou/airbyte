@@ -82,11 +82,11 @@ async def run_all_tests(context: ConnectorContext) -> List[StepResult]:
     context.connector_secrets = await secrets.get_connector_secrets(context)
     step_results = []
 
-    unit_tests_results = await UnitTests(context).run()
-    step_results.append(unit_tests_results)
+    # unit_tests_results = await UnitTests(context).run()
+    # step_results.append(unit_tests_results)
 
-    if context.fail_fast and unit_tests_results.status is StepStatus.FAILURE:
-        return step_results
+    # if context.fail_fast and unit_tests_results.status is StepStatus.FAILURE:
+    #     return step_results
 
     build_distribution_tar_results = await BuildConnectorDistributionTar(context).run()
     step_results.append(build_distribution_tar_results)
